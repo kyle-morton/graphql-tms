@@ -1,5 +1,7 @@
 using GraphQLTMS.Core.Data;
 using GraphQLTMS.Core.Domain;
+using GraphQLTMS.Core.GraphQL;
+using GraphQLTMS.Core.GraphQL.Types;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.EntityFrameworkCore;
 
@@ -7,18 +9,34 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-builder.Services.AddDbContext<GraphQLTMSDbContext>(options =>
-    options.UseSqlServer(connectionString));
+builder.Services.AddDbContext<ApplicationUserDbContext>(options =>
+    options.UseSqlServer(connectionString)
+);
+builder.Services.AddPooledDbContextFactory<TMSDbContext>(options =>
+    options.UseSqlServer(connectionString)
+);
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
-    .AddEntityFrameworkStores<GraphQLTMSDbContext>();
+    .AddEntityFrameworkStores<ApplicationUserDbContext>();
 
 builder.Services.AddIdentityServer()
-    .AddApiAuthorization<ApplicationUser, GraphQLTMSDbContext>();
+    .AddApiAuthorization<ApplicationUser, ApplicationUserDbContext>();
 
 builder.Services.AddAuthentication()
     .AddIdentityServerJwt();
+
+builder.Services
+    .AddGraphQLServer()
+    .AddQueryType<Query>()
+    //.AddMutationType<Mutation>()
+    //.AddSubscriptionType<Subscription>()
+    //.AddType<PlatformType>()
+    .AddType<CustomerType>()
+    .AddFiltering()
+    .AddSorting()
+    .AddInMemorySubscriptions() // keeps track of subscribers in memory (can be in DB)
+    .ModifyRequestOptions(opt => opt.IncludeExceptionDetails = builder.Environment.IsDevelopment());
 
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
@@ -44,11 +62,19 @@ app.UseBlazorFrameworkFiles();
 app.UseStaticFiles();
 
 app.UseRouting();
+app.UseAuthorization();
+app.UseEndpoints(endpoints => {
+    endpoints.MapControllers();
+    endpoints.MapGraphQL();
+});
+
+app.UseGraphQLVoyager(new GraphQL.Server.Ui.Voyager.VoyagerOptions()
+{
+    GraphQLEndPoint = "/graphql"
+}, "/graphqlvoyager");
 
 app.UseIdentityServer();
 app.UseAuthentication();
-app.UseAuthorization();
-
 
 app.MapRazorPages();
 app.MapControllers();

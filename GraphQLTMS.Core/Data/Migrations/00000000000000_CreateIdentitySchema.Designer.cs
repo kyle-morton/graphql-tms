@@ -10,7 +10,7 @@ using System;
 
 namespace GraphQLTMS.Server.Data.Migrations
 {
-    [DbContext(typeof(GraphQLTMSDbContext))]
+    [DbContext(typeof(ApplicationUserDbContext))]
     [Migration("00000000000000_CreateIdentitySchema")]
     partial class CreateIdentitySchema
     {

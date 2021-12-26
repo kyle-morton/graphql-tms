@@ -13,11 +13,11 @@ namespace GraphQLTMS.Core.Data
         {
             using (var serviceScope = app.ApplicationServices.CreateScope())
             {
-                await SeedData(serviceScope.ServiceProvider.GetService<GraphQLTMSDbContext>(), config, env);
+                await SeedData(serviceScope.ServiceProvider.GetService<TMSDbContext>(), config, env);
             }
         }
 
-        private static async Task SeedData(GraphQLTMSDbContext context, IConfiguration config, IWebHostEnvironment env)
+        private static async Task SeedData(TMSDbContext context, IConfiguration config, IWebHostEnvironment env)
         {
             try
             {
@@ -37,6 +37,8 @@ namespace GraphQLTMS.Core.Data
             {
                 Origin = "Little Rock, AR 72211",
                 Destination = "Chicago, IL 60606",
+                Revenue = 5000,
+                Cost = 4000,
                 WeightInPounds = 1500,
                 PickupDate = DateTime.Now.AddDays(1),
                 DeliveryDate = DateTime.Now.AddDays(5),

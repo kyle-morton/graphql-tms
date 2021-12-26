@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace GraphQLTMS.Server.Data.Migrations
+namespace GraphQLTMS.Core.Migrations
 {
     public partial class init : Migration
     {
@@ -18,7 +18,11 @@ namespace GraphQLTMS.Server.Data.Migrations
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Scac = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     SafetyRating = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    IsApproved = table.Column<bool>(type: "bit", nullable: false)
+                    IsApproved = table.Column<bool>(type: "bit", nullable: false),
+                    CreatedByUserId = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreatedByDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    UpdatedByUserId = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    UpdatedByDate = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -34,7 +38,11 @@ namespace GraphQLTMS.Server.Data.Migrations
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CustomerNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     SpendingLimit = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
-                    IsOnHold = table.Column<bool>(type: "bit", nullable: false)
+                    IsOnHold = table.Column<bool>(type: "bit", nullable: false),
+                    CreatedByUserId = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreatedByDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    UpdatedByUserId = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    UpdatedByDate = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -52,8 +60,14 @@ namespace GraphQLTMS.Server.Data.Migrations
                     WeightInPounds = table.Column<int>(type: "int", nullable: false),
                     PickupDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     DeliveryDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    Revenue = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Cost = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     CustomerId = table.Column<int>(type: "int", nullable: true),
-                    CarrierId = table.Column<int>(type: "int", nullable: true)
+                    CarrierId = table.Column<int>(type: "int", nullable: true),
+                    CreatedByUserId = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreatedByDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    UpdatedByUserId = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    UpdatedByDate = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
