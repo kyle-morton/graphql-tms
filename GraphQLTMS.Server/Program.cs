@@ -54,4 +54,6 @@ app.MapRazorPages();
 app.MapControllers();
 app.MapFallbackToFile("index.html");
 
+await DbInitializer.Populate(app, app.Configuration, app.Environment);
+
 app.Run();
