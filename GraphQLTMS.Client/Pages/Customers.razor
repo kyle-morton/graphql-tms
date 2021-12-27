@@ -1,0 +1,59 @@
+﻿@page "/Customers"
+@using GraphQLTMS.Client.Clients
+@using GraphQLTMS.Shared
+@using GraphQLTMS.Shared.Domain
+@using GraphQLTMS.Shared.ViewModels.Customers
+@inject ITMSClient tmsClient;
+
+<PageTitle>Customers</PageTitle>
+
+<h1>Customers</h1>
+
+@if (customers == null || !customers.Any())
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var customer in customers)
+            {
+                <tr>
+                    <td>@customer.Id</td>
+                    <td>
+                        @customer.Name
+                        <div>
+                            <span class="text-muted">@customer.CustomerNumber</span>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private List<CustomerIndexViewModel> customers = new List<CustomerIndexViewModel>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        var query = @"
+            query {
+             customers {
+              id
+              name
+                    customerNumber
+             }
+            }
+        ";
+        var result = await tmsClient.RunQueryAsync<GetCustomerIndexViewModel>(query);
+        customers = result.Customers;
+    }
+}

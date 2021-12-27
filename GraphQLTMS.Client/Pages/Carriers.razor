@@ -1,0 +1,45 @@
+﻿@page "/Carriers"
+@using GraphQLTMS.Shared
+@using GraphQLTMS.Shared.Domain
+@using GraphQLTMS.Shared.ViewModels
+@inject HttpClient Http
+
+<PageTitle>Carriers</PageTitle>
+
+<h1>Carriers</h1>
+
+@*@if (carriers == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>SCAC</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var carrier in carriers)
+            {
+                <tr>
+                    <td>@carrier.Id</td>
+                    <td>@carrier.Name</td>
+                    <td>@carrier.Scac</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private List<CarrierReadDto> carriers;
+
+    protected override async Task OnInitializedAsync()
+    {
+        carriers = await Http.GetFromJsonAsync<List<CarrierReadDto>>("Carriers");
+    }
+}*@

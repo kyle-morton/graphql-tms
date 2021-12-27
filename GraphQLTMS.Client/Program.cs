@@ -1,4 +1,5 @@
 using GraphQLTMS.Client;
+using GraphQLTMS.Client.Clients;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
@@ -12,6 +13,8 @@ builder.Services.AddHttpClient("GraphQLTMS.ServerAPI", client => client.BaseAddr
 
 // Supply HttpClient instances that include access tokens when making requests to the server project
 builder.Services.AddScoped(sp => sp.GetRequiredService<IHttpClientFactory>().CreateClient("GraphQLTMS.ServerAPI"));
+
+builder.Services.AddTransient<ITMSClient, TMSClient>();
 
 builder.Services.AddApiAuthorization();
 

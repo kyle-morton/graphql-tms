@@ -1,9 +1,46 @@
 ﻿@page "/"
+@inject HttpClient Http
 
-<PageTitle>Index</PageTitle>
+<PageTitle>Shipments</PageTitle>
 
-<h1>Hello, world!</h1>
+<h1>Shipments</h1>
 
-Welcome to your new app.
+@*@if (shipments == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Origin</th>
+                <th>Destination</th>
+                <th>Weight</th>
+                <th>Pickup Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var shipment in shipments)
+            {
+                <tr>
+                    <td>@shipment.Id</td>
+                    <td>@shipment.Origin</td>
+                    <td>@shipment.Destination</td>
+                    <td>@shipment.WeightInPounds</td>
+                    <td>@shipment.PickupDate.Value.ToShortDateString()</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}*@
 
-<SurveyPrompt Title="How is Blazor working for you?" />
+@code {
+    //private List<Shipment> shipments;
+
+    //protected override async Task OnInitializedAsync()
+    //{
+    //    shipments = await Http.GetFromJsonAsync<List<Shipment>>("Shipments");
+    //}
+}

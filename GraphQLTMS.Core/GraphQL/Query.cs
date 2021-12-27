@@ -9,7 +9,7 @@ namespace GraphQLTMS.Core.GraphQL
         [UseDbContext(typeof(TMSDbContext))]
         [UseFiltering]
         [UseSorting]
-        public IQueryable<Customer> GetCustomer([ScopedService] TMSDbContext context)
+        public IQueryable<Customer> GetCustomers([ScopedService] TMSDbContext context)
         {
             return context.Customers;
         }
