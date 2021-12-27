@@ -9,18 +9,21 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-builder.Services.AddDbContext<ApplicationUserDbContext>(options =>
-    options.UseSqlServer(connectionString)
-);
+
 builder.Services.AddPooledDbContextFactory<TMSDbContext>(options =>
     options.UseSqlServer(connectionString)
 );
+builder.Services.AddDbContext<ApplicationUserDbContext>(options =>
+    options.UseSqlServer(connectionString)
+);
+
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddEntityFrameworkStores<ApplicationUserDbContext>();
 
-builder.Services.AddIdentityServer()
+builder.Services
+    .AddIdentityServer()
     .AddApiAuthorization<ApplicationUser, ApplicationUserDbContext>();
 
 builder.Services.AddAuthentication()
@@ -80,6 +83,6 @@ app.MapRazorPages();
 app.MapControllers();
 app.MapFallbackToFile("index.html");
 
-await DbInitializer.Populate(app, app.Configuration, app.Environment);
+//await DbInitializer.Populate(app, app.Configuration, app.Environment);
 
 app.Run();
