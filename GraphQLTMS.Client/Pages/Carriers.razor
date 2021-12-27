@@ -1,45 +1,61 @@
 ﻿@page "/Carriers"
+@using GraphQLTMS.Client.Clients
 @using GraphQLTMS.Shared
 @using GraphQLTMS.Shared.Domain
 @using GraphQLTMS.Shared.ViewModels
-@inject HttpClient Http
+@using GraphQLTMS.Shared.ViewModels.Carriers;
+@inject ITMSClient tmsClient;
 
 <PageTitle>Carriers</PageTitle>
 
 <h1>Carriers</h1>
 
-@*@if (carriers == null)
+@if (carriers == null || !carriers.Any())
 {
-    <p><em>Loading...</em></p>
+        <p><em>Loading...</em></p>
 }
 else
 {
-    <table class="table">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Name</th>
-                <th>SCAC</th>
-            </tr>
-        </thead>
-        <tbody>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                </tr>
+            </thead>
+            <tbody>
             @foreach (var carrier in carriers)
             {
-                <tr>
-                    <td>@carrier.Id</td>
-                    <td>@carrier.Name</td>
-                    <td>@carrier.Scac</td>
-                </tr>
+                        <tr>
+                            <td>@carrier.Id</td>
+                            <td>
+                                @carrier.Name
+                                <div>
+                                    <span class="text-muted">@carrier.Scac</span>
+                                </div>
+                            </td>
+                        </tr>
             }
-        </tbody>
-    </table>
+            </tbody>
+        </table>
 }
 
 @code {
-    private List<CarrierReadDto> carriers;
+
+    private List<CarrierIndexViewModel> carriers = new List<CarrierIndexViewModel>();
 
     protected override async Task OnInitializedAsync()
     {
-        carriers = await Http.GetFromJsonAsync<List<CarrierReadDto>>("Carriers");
-    }
-}*@
+            var query = @"
+                query {
+                 carriers {
+                    id
+                    name
+                    scac
+                 }
+                }
+            ";
+            var result = await tmsClient.RunQueryAsync<GetCarrierIndexViewModel>(query);
+            carriers = result.Carriers;
+        }
+}
